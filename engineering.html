@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engineering portfolio | Moamen Elsharkawy</title>
+  <meta name="description" content="Applied AI, machine learning and software engineering projects by Moamen Elsharkawy, with source code, test evidence and demonstrations.">
+  <link rel="canonical" href="https://moamen-elsharkawy.github.io/engineering.html">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="stylesheet" href="./assets/fonts.css">
+  <link rel="stylesheet" href="./assets/tokens.css">
+  <link rel="stylesheet" href="./assets/site.css">
+  <style>
+    .engineering { width: min(1100px, 100%); margin-inline: auto; padding: clamp(24px, 5vw, 76px); }
+    .engineering nav, .action-links { display: flex; flex-wrap: wrap; gap: .7rem 1.4rem; }
+    .engineering a { text-underline-offset: .22em; overflow-wrap: anywhere; }
+    .engineering a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+    .engineering header { border-block: 1px solid var(--hairline); padding-block: clamp(26px, 7vw, 85px); margin-block: 24px 42px; }
+    .engineering h1 { max-width: 16ch; margin-block: 9px 24px; }
+    .intro { max-width: 60ch; margin-block: 15px 25px; }
+    .engineering h2 { margin-block: 40px 18px; }
+    .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 30px; border-top: 1px solid var(--hairline); }
+    .project { display: flex; flex-direction: column; padding-block: 20px; border-bottom: 1px solid var(--hairline); gap: 10px; }
+    .project h3 { margin: 0; }
+    .project .action-links { margin-top: auto; }
+    .engineering footer { margin-top: 48px; padding-block: 20px; border-top: 1px solid var(--hairline); }
+    @media (max-width: 650px) { .projects { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <main id="main" class="engineering">
+    <nav aria-label="Page navigation">
+      <a class="link-underline" href="./index.html">Moamen Elsharkawy</a>
+      <a class="link-underline" href="#applied">Applied AI</a>
+      <a class="link-underline" href="#models">Machine learning</a>
+    </nav>
+    <header>
+      <p class="kicker">Applied AI engineer · Cairo, Egypt</p>
+      <h1>AI engineering portfolio</h1>
+      <p class="intro">I build AI agents, retrieval systems and software that connects to business tools. My work spans Python, TypeScript and n8n, from document question answering to CRM workflows with retries, audit trails and human approval.</p>
+      <div class="action-links">
+        <a class="link-underline" href="./assets/Moamen-Elsharkawy-CV.pdf">Download CV</a>
+        <a class="link-underline" href="https://github.com/Moamen-Elsharkawy">GitHub</a>
+        <a class="link-underline" href="mailto:contact@moamen-ai.com">Email</a>
+      </div>
+    </header>
+    <section aria-labelledby="applied">
+      <h2 id="applied">Applied AI and integration</h2>
+      <div class="projects">
+        <article class="project">
+          <p class="kicker">Tested engineering reference</p>
+          <h3>Lead Intelligence Pipeline</h3>
+          <p>Built intake and routing into Odoo CRM, with deterministic scoring, LLM classification, idempotency and dead-letter replay. The repository documents tests for duplicates, invalid inputs and failed writes.</p>
+          <div class="action-links"><a class="link-underline" href="https://github.com/Moamen-Elsharkawy/lead-intelligence-pipeline">Code and test evidence</a></div>
+        </article>
+        <article class="project">
+          <p class="kicker">Deployed showcase</p>
+          <h3>Sawt</h3>
+          <p>Built an Egyptian-Arabic voice interface for business tools, with human confirmation before sensitive actions. Presented at n8n Cairo Meetup.</p>
+          <div class="action-links"><a class="link-underline" href="https://github.com/Moamen-Elsharkawy/sawt-voice-command-layer">Code and workflow architecture</a></div>
+        </article>
+        <article class="project">
+          <p class="kicker">Paid client delivery</p>
+          <h3>Transcript Translator</h3>
+          <p>Automated Arabic DOCX transcript translation while preserving timestamps and segment order. Intake uses Telegram and the result is delivered through Drive.</p>
+          <div class="action-links"><a class="link-underline" href="https://github.com/Moamen-Elsharkawy/transcript-translator-bot">Workflow and delivery scope</a></div>
+        </article>
+        <article class="project">
+          <p class="kicker">First-place team prototype</p>
+          <h3>n8n Hackathon Cairo</h3>
+          <p>Co-built a social content workflow with separate research and writing steps, image generation and human approval.</p>
+          <div class="action-links"><a class="link-underline" href="https://app.notion.com/p/4111df9dd8148162a33df10fcd00839c">Hackathon case study</a></div>
+        </article>
+      </div>
+    </section>
+    <section aria-labelledby="models">
+      <h2 id="models">Machine learning and applied research</h2>
+      <div class="projects">
+        <article class="project">
+          <p class="kicker">Academic project</p>
+          <h3>Multimodal Document QA</h3>
+          <p>Built page retrieval for visually rich PDFs with a ColPali path, TF-IDF fallback and page citations. The saved evaluation illustrates keyword coverage and latency. The retrieval backend for that run is unrecorded.</p>
+          <div class="action-links"><a class="link-underline" href="https://github.com/Moamen-Elsharkawy/multimodal-rag-colpali">Code and evaluation harness</a></div>
+        </article>
+        <article class="project">
+          <p class="kicker">Academic team project</p>
+          <h3>Chest X-ray Detection and Classification</h3>
+          <p>Integrated classifiers and object detectors for DICOM inputs. The project demonstrates preprocessing, inference, hyperparameter optimization and Grad-CAM explanations.</p>
+          <div class="action-links"><a class="link-underline" href="https://github.com/Moamen-Elsharkawy/chest-xray-pneumonia-detection">Training and inference source</a></div>
+        </article>
+        <article class="project">
+          <p class="kicker">Geospatial software prototype</p>
+          <h3>ARES / Jezero Route Lab</h3>
+          <p>Processed public HiRISE terrain into a browser visualization and compared A* route cost strategies under illustrative constraints.</p>
+          <div class="action-links">
+            <a class="link-underline" href="https://github.com/Moamen-Elsharkawy/ares-jezero-route-lab">Source and QA notes</a>
+            <a class="link-underline" href="https://moamen-elsharkawy.github.io/ares-jezero-route-lab/">Try the demo</a>
+          </div>
+        </article>
+      </div>
+    </section>
+    <footer class="action-links">
+      <a class="link-underline" href="https://app.notion.com/p/c201df9dd81482998591011f978b1bda">Full project library on Notion</a>
+      <a class="link-underline" href="https://www.linkedin.com/in/moamen--elsharkawy/">LinkedIn</a>
+    </footer>
+  </main>
+</body>
+</html>

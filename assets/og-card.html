@@ -1,0 +1,77 @@
+<!doctype html>
+<!-- Source for assets/og-card.png (1200x630). Render with:
+       node projects/internal/personal-site/tools/make-assets.mjs --og
+     This is a fixed-size render canvas, NOT a page: tools/site-qa.mjs deliberately does not walk
+     site/assets/, because at 390px wide this file reports ~810px of overflow and would fail the
+     gate on every run. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./fonts.css">
+<link rel="stylesheet" href="./tokens.css">
+<style>
+  html, body { margin: 0; padding: 0; }
+  .card {
+    width: 1200px; height: 630px; background: var(--pearl-ivory);
+    padding: 62px 72px; box-sizing: border-box;
+    display: flex; flex-direction: column; justify-content: space-between;
+    font-family: var(--font-body); position: relative;
+  }
+  .rule-top, .rule-bot { height: 1px; background: var(--obsidian-navy); }
+  .meta-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px 0; font-family: var(--font-mono); font-weight: 500;
+    font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .meta-row .k { color: #826429; }        /* --brass-deep: brass text on Pearl */
+  .meta-row .r { color: var(--graphite); }
+  h1 {
+    font-family: var(--font-display); font-weight: 800; font-size: 74px; line-height: 1.1;
+    letter-spacing: -0.03em; color: var(--obsidian-navy); max-width: 20ch; margin: 0;
+  }
+  h1 em { font-style: normal; color: #826429; }
+  .lead { font-size: 21px; line-height: 1.55; color: var(--graphite); max-width: 52ch; margin-top: 24px; }
+  .node-rule { display: block; width: 80px; margin-bottom: 26px; }  /* tokens.css sets no display */
+  .foot { display: flex; justify-content: space-between; align-items: flex-end; }
+  .sig { display: inline-flex; align-items: center; gap: 12px; }
+  .sig span {
+    font-weight: 600; font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--obsidian-navy);
+  }
+  .url { font-family: var(--font-mono); font-weight: 500; font-size: 14px;
+         letter-spacing: 0.14em; text-transform: uppercase; color: var(--graphite); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div>
+    <div class="rule-top"></div>
+    <div class="meta-row">
+      <span class="k">AI automation engineer &middot; Cairo</span>
+      <span class="r">Vol. 01 &middot; 2026</span>
+    </div>
+    <div class="rule-bot"></div>
+  </div>
+
+  <div>
+    <span class="node-rule"></span>
+    <h1>Your business already has a system. It just runs on <em>people remembering things</em>.</h1>
+    <p class="lead">I build businesses their own AI Operating System, so the owner stops being the
+      bottleneck.</p>
+  </div>
+
+  <div class="foot">
+    <div class="sig">
+      <svg viewBox="0 0 120 120" width="34" height="34" style="color:#B8924C">
+        <path d="M24 30 L24 94 M24 30 L60 74 L96 30 M96 30 L96 94" fill="none" stroke="currentColor"
+              stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="24" cy="30" r="9" fill="currentColor"/><circle cx="96" cy="30" r="9" fill="currentColor"/>
+        <circle cx="60" cy="74" r="9" fill="currentColor"/>
+      </svg>
+      <span>Moamen Elsharkawy</span>
+    </div>
+    <span class="url">moamen-ai.com</span>
+  </div>
+</div>
+</body>
+</html>

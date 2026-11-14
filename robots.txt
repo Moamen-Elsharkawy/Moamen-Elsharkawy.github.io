@@ -1,0 +1,7 @@
+# Moamen Elsharkawy - moamen-ai.com
+User-agent: *
+Allow: /
+Disallow: /privacy.html
+Disallow: /_qa/
+
+Sitemap: https://moamen-elsharkawy.github.io/sitemap.xml

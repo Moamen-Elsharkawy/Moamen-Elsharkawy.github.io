@@ -1,0 +1,87 @@
+/* case.css - the case-study pages only. Loads after site.css.
+   Everything here is additive; nothing overrides a brand class's meaning. */
+
+.case-hero { padding-top: clamp(32px, 3vw, 48px); }
+
+.back-link {
+  display: inline-block; margin-bottom: clamp(28px, 3vw, 44px);
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-2);
+}
+.back-link::before {
+  content: ""; display: inline-block; width: 18px; height: 1.5px;
+  background: var(--accent); margin-inline-end: 10px; vertical-align: 0.28em;
+}
+.back-link:hover { color: var(--brass-deep); }
+
+.case-hero-grid {
+  display: grid; grid-template-columns: 1fr auto; gap: clamp(32px, 4vw, 72px);
+  align-items: start;
+}
+@media (max-width: 900px) { .case-hero-grid { grid-template-columns: 1fr; } }
+
+.case-hero .kicker { display: block; margin-bottom: 12px; }
+.case-hero .node-rule { margin-bottom: 22px; }
+.case-hero h1 { max-width: 18ch; }
+.case-hero h1 em { font-style: normal; color: var(--brass-deep); }
+.case-hero .lead { margin-top: 22px; max-width: 54ch; font-size: var(--fs-body-lg); }
+.case-hero .stack-strip { margin-top: 28px; max-width: 52ch; }
+
+.case-hero-fig { text-align: end; min-width: 190px; }
+.case-hero-fig .fig-num { font-size: clamp(44px, 3.4vw + 20px, 82px); }
+.case-hero-fig .node-rule { margin: 16px 0 14px auto; width: 48px; }
+.case-hero-fig .fig-src { max-width: 22ch; margin-inline-start: auto; text-align: end; }
+.case-hero-fig .prov-back {
+  display: inline-block; margin-top: 16px; font-size: 11px;
+  font-family: var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  border-bottom: 1.5px solid var(--accent); padding-bottom: 2px; color: var(--fg-2);
+}
+.case-hero-fig .prov-back:hover { color: var(--brass-deep); }
+@media (max-width: 900px) {
+  .case-hero-fig { text-align: start; }
+  .case-hero-fig .node-rule { margin-inline: 0 auto; }
+  .case-hero-fig .fig-src { margin-inline-start: 0; text-align: start; }
+}
+
+.case-cover {
+  width: 100%; height: auto; margin-top: clamp(40px, 4vw, 64px);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--hairline);
+}
+
+.case-body { max-width: var(--web-measure); }
+.case-body h2 { margin-bottom: 20px; }
+.case-body p + p { margin-top: 16px; }
+.case-does, .case-watch { margin-top: 8px; }
+
+/* Labels under the reusable chain rail. Same trick as the hero graph's labels: HTML in a grid that
+   shares the diagram's column template, never <text> inside the SVG (SVG text scales with the
+   viewBox and would drop under the brand's 9px floor on a phone). */
+.chain-labels {
+  display: grid; margin-top: 12px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-2);
+}
+.chain-labels span { text-align: center; }
+@media (max-width: 700px) {
+  .chain-labels { font-size: 10px; letter-spacing: 0.08em; }
+}
+
+.case-nav {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 2.4vw, 40px);
+  padding: clamp(40px, 4vw, 64px) var(--web-gutter);
+  border-top: 1px solid var(--hairline);
+}
+.case-nav-item .meta { display: block; margin-bottom: 10px; font-size: 11px; }
+.case-nav-item strong {
+  font-family: var(--font-display); font-weight: var(--w-bold); font-size: var(--fs-h3);
+  color: var(--fg-1); transition: color var(--web-t-hover) ease; display: block; max-width: 26ch;
+}
+.case-nav-item:hover strong { color: var(--brass-deep); }
+.case-nav-item.next { text-align: end; }
+.case-nav-item.next strong { margin-inline-start: auto; }
+@media (max-width: 700px) {
+  .case-nav { grid-template-columns: 1fr; }
+  .case-nav-item.next { text-align: start; }
+  .case-nav-item.next strong { margin-inline-start: 0; }
+}

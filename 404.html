@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<!-- ASSET PATHS HERE ARE ROOT-ABSOLUTE (/assets/...) ON PURPOSE, and this is the only page on the site
+     that does that. GitHub Pages serves /404.html for a miss at ANY depth, so a relative ./assets/
+     would resolve to /work/assets/ for a bad /work/* URL and the error page would render unstyled.
+     Consequence: over file:// these paths point at the filesystem root and 404 locally, so
+     tools/site-qa.mjs exempts this page from the 404 assertion (it still checks overflow and tokens). -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found - Moamen Elsharkawy</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/fonts.css">
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .nf { min-height: 78vh; min-height: 78svh; display: flex; align-items: center; }
+  .nf-inner { max-width: 48ch; }
+</style>
+</head>
+<body>
+
+<main id="main">
+<section class="band nf">
+  <div class="container">
+    <div class="nf-inner">
+      <span class="kicker">404</span>
+      <span class="node-rule" aria-hidden="true" style="margin:12px 0 24px"></span>
+      <h1 style="font-size:var(--fs-h2)">That page isn't here.</h1>
+      <p style="margin-top:20px;font-size:var(--fs-body-lg)">Either the link is wrong or I moved
+        something and did not redirect it. The second one is my fault.</p>
+      <div class="cta-row">
+        <a class="btn" href="/">Back to the start</a>
+        <a class="link-underline" href="/#work">See the work</a>
+      </div>
+      <div class="signature" style="margin-top:52px">
+        <svg class="sig-mark" viewBox="0 0 120 120" width="26" height="26" style="color:var(--aged-brass)" aria-hidden="true">
+          <path d="M24 30 L24 94 M24 30 L60 74 L96 30 M96 30 L96 94" fill="none" stroke="currentColor"
+                stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="30" r="9" fill="currentColor"/><circle cx="96" cy="30" r="9" fill="currentColor"/>
+          <circle cx="60" cy="74" r="9" fill="currentColor"/>
+        </svg>
+        <span class="sig-name">Moamen Elsharkawy</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+</body>
+</html>

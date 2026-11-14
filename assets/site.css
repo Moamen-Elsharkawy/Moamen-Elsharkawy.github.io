@@ -1,0 +1,866 @@
+/* ============================================================================================
+   site.css - THE WEB LAYER for moamen-ai.com
+   Loads AFTER assets/tokens.css (the vendored, frozen Premium Light brand system).
+   ============================================================================================
+
+   HOW THIS RELATES TO THE BRAND. tokens.css is tuned for fixed canvases (1080x1350, 1280x720) and
+   every one of its type classes hardcodes `font-size: var(--fs-h1)` etc. So the cheapest correct way
+   to make the whole brand responsive is to REASSIGN those same custom properties here, in one :root
+   block. Because this file loads second, the new values cascade into .h1 / .h2 / .kicker / .hero-num /
+   .quote-mark / .body with every ratio, tracking and line-height preserved. tokens.css is never
+   edited (it is frozen and hash-checked by tools/sync-brand.mjs --check).
+
+   FOUR RECORDED AMENDMENTS. A responsive site cannot hold every canvas-tuned number. Each deviation
+   is a documented decision, not silent drift. Full reasoning: docs/decisions.md.
+
+     A. Body base 15px -> 16px minimum. The canvas scale was tuned for a 1080px artboard, not a
+        16px-rem browser.
+     B. --fs-hero-num may fall below the brand's 80px floor under 1024px, because 80px overflows a
+        390px column. It never exceeds 120px, so the top of the 80-120px band is respected.
+     C. The kicker is 11px, stepping to 12px at 768px, not the canvas 10px. At 0.2em tracking, 10px is
+        unreadable on a phone. Nothing on this site renders below 11px, so the brand's 9px hard floor
+        keeps real headroom instead of being scraped.
+     D. CONTRAST. Measured against Pearl Ivory #F4EFE6: Obsidian 15.19:1 and Graphite 10.96:1 pass,
+        but Mist 2.19:1, Aged Brass 2.53:1 and Steel Cyan 2.13:1 fail even the 3:1 non-text minimum,
+        at every size. brand-guide.md never mentions contrast, so it gives no cover. The line drawn
+        here, and it is a clean one:
+          - brass TEXT on Pearl        -> --brass-deep #826429 (4.82:1)
+          - brass GEOMETRY (rules, dots, node motif, graph spine, the mark, borders) -> --aged-brass,
+            unchanged, because none of it is text
+          - brass text on the two obsidian bands -> --aged-brass, unchanged (6.01:1)
+          - mist TEXT on Pearl         -> --graphite (10.96:1)
+          - mist text on obsidian      -> --mist, unchanged (6.95:1)
+          - mist 1px hairlines         -> unchanged, non-text
+          - focus ring                 -> Obsidian, never brass
+        --brass-deep is the same hue (39.8deg vs 38.9deg), just darker, so kickers still read as
+        brass. Brass is never the sole carrier of information anywhere on this site.
+        NOTE: --graphite is 1.39:1 on Obsidian. It must never appear on the two dark bands.
+
+   STRUCTURAL LAW: brass rule widths stay FIXED at the token values (32 / 40 / 80px) and are never a
+   percentage or a vw. brand-guide.md says a brass rule is 24-80px and must always be short, never
+   spanning full width - a percentage-width rule violates that at some viewport by definition.
+
+   MEASURE, NOT PERCENTAGE COLUMNS: the reading column is set in `ch`. That is what makes the page read
+   as a publication at every width rather than only at the one it was designed on.
+
+   FILE ORDER MATTERS: the prefers-reduced-motion block is the LAST thing in this file. If it came
+   before the component rules, `.reveal { opacity: 1 }` would lose the cascade to the later
+   `.reveal { opacity: 0 }` at equal specificity, and any element the JS guard missed would stay
+   invisible. Do not move it.
+
+   BREAKPOINTS - four, and only four (CSS cannot use custom properties in media queries, so literals):
+     560px   credential strips and 4-up figure grids go single column; colophon bottom row wraps
+     700px   the hero node graph is replaced by its 2x2 HTML fallback; the fixed bottom CTA bar
+             appears; masthead drops to 56px
+     900px   2x2 and 3-up grids collapse; masthead centre links hide; ledger goes 2x2
+     1080px  the hero, #house and the work rows split into two columns
+   (1200px is used once, to let #method go 4-across.)
+   ============================================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1. TOKEN LAYER - fluid reassignment + the new --web-* names
+   Every clamp is written as clamp(min, Avw + Bpx, max) so the middle term is exact at both ends
+   (390px phone, 1440px desktop) instead of being a hand-waved guess.
+   --------------------------------------------------------------------------- */
+:root {
+  /* --- amendment D: the one new colour, a darker shade of the existing brass --- */
+  --brass-deep: #826429;         /* 4.82:1 on Pearl Ivory. Brass TEXT on light surfaces only. */
+
+  /* --- fluid type scale (reassigns tokens.css) --- */
+  --fs-kicker:   11px;                                  /* amendment C; steps to 12px at 768px */
+  --fs-caption:  clamp(12px, 0.10vw + 11.6px, 13px);
+  --fs-body-sm:  clamp(13px, 0.10vw + 12.6px, 14px);
+  --fs-body:     clamp(16px, 0.19vw + 15.3px, 18px);    /* amendment A */
+  --fs-body-lg:  clamp(17px, 0.38vw + 15.5px, 21px);
+  --fs-h3:       clamp(19px, 0.29vw + 17.9px, 22px);
+  --fs-h2:       clamp(27px, 1.43vw + 21.4px, 42px);
+  --fs-h1:       clamp(38px, 2.86vw + 26.9px, 68px);
+  --fs-hero-num: clamp(52px, 6.10vw + 28.2px, 116px);   /* amendment B */
+  --fs-quote:    clamp(72px, 4.57vw + 54.2px, 120px);
+
+  /* --- things the canvas system never needed --- */
+  --web-gutter:       clamp(24px, 4.6vw, 72px);  /* 24px floor is the brand's own stated minimum */
+  --web-band-y:       clamp(72px, 8.6vw, 148px);
+  --web-container:    1160px;
+  --web-measure:      68ch;
+  --web-measure-lead: 34ch;
+  --web-measure-head: 21ch;
+
+  --web-masthead-h:   66px;
+  --web-mobile-cta-h: 56px;
+
+  /* --- motion --- */
+  --web-ease:      cubic-bezier(0.2, 0.7, 0.3, 1);
+  --web-ease-draw: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --web-t-hover:   160ms;
+  --web-t-reveal:  240ms;
+}
+
+@media (min-width: 768px) {
+  :root { --fs-kicker: 12px; }
+}
+
+/* ---------------------------------------------------------------------------
+   2. BASE
+   --------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* every anchor target clears the sticky masthead; see .anchor below */
+  scroll-padding-bottom: var(--web-mobile-cta-h);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg-1);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  overflow-x: hidden;   /* belt-and-braces: site-qa.mjs asserts scrollWidth == innerWidth */
+}
+
+img, svg { display: block; max-width: 100%; }
+ul, ol { list-style: none; }
+
+a { color: inherit; text-decoration: none; transition: color var(--web-t-hover) ease; }
+a:hover { color: var(--brass-deep); }          /* colour shift only - brand law, no geometry change */
+a:active { opacity: 0.85; }                     /* press state; never a shrink */
+
+/* Focus: Obsidian at 15.19:1. NEVER brass (2.53:1 would fail the 3:1 non-text minimum). */
+:focus-visible { outline: 2px solid var(--obsidian-navy); outline-offset: 3px; border-radius: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+.band--dark :focus-visible { outline-color: var(--pearl-ivory); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Skip link - first focusable element on every page. */
+.skip {
+  position: absolute; left: var(--web-gutter); top: -100px; z-index: 100;
+  background: var(--obsidian-navy); color: var(--pearl-ivory);
+  padding: 12px 20px; font-size: var(--fs-body-sm); font-weight: var(--w-label);
+  transition: top 120ms ease;
+}
+.skip:focus { top: 12px; color: var(--pearl-ivory); }
+
+/* Every id that is a link target clears the sticky masthead, so a jump does not land under it.
+   Load-bearing for the nine #numbers provenance rows the ledger figures link to. */
+.anchor { scroll-margin-top: calc(var(--web-masthead-h) + 16px); }
+@media (max-width: 700px) { .anchor { scroll-margin-top: 72px; } }
+
+/* ---------------------------------------------------------------------------
+   3. AMENDMENT D APPLIED - the colour corrections over tokens.css
+   --------------------------------------------------------------------------- */
+
+/* Brass text on Pearl drops to the deeper shade. */
+.kicker { color: var(--brass-deep); letter-spacing: var(--ls-kicker); }
+.hero-num { color: var(--brass-deep); }
+.hl-brass { color: var(--brass-deep); }
+
+/* Mist text on Pearl becomes Graphite. Mist survives only as hairlines and on the dark bands. */
+.caption, .meta { color: var(--fg-2); }
+
+/* On the two obsidian bands, brass and mist are already compliant, so they revert to the true brand
+   values. This is also why --graphite must never appear inside .band--dark. */
+.band--dark .kicker,
+.band--dark .hero-num,
+.band--dark .hl-brass { color: var(--accent); }
+.band--dark .caption,
+.band--dark .meta { color: var(--fg-3); }
+
+/* ---------------------------------------------------------------------------
+   4. LAYOUT PRIMITIVES
+   --------------------------------------------------------------------------- */
+.container { width: 100%; max-width: var(--web-container); margin-inline: auto; }
+
+.band { padding: var(--web-band-y) var(--web-gutter); }
+.band--tight { padding-block: calc(var(--web-band-y) * 0.72); }
+
+.band--dark {
+  background: var(--bg-inverted);
+  color: var(--pearl-ivory);
+}
+.band--dark h2, .band--dark h3, .band--dark .h2, .band--dark .h3 { color: var(--pearl-ivory); }
+.band--dark p { color: #CFCABF; }   /* Pearl at reduced strength: 11.2:1 on Obsidian */
+
+.measure { max-width: var(--web-measure); }
+
+.sec-head { margin-bottom: clamp(40px, 4vw, 64px); }
+.sec-head .kicker { display: block; margin-bottom: 12px; }
+.sec-head .node-rule { margin-bottom: 22px; }
+.sec-head h2 { max-width: 24ch; }
+.sec-head p { margin-top: 18px; max-width: 56ch; font-size: var(--fs-body-lg); }
+
+/* A section head whose "heading" is really a statement line, not a title (used by #ledger). Set at
+   body-lg in the display face rather than at h2 scale, so it reads as a claim being made rather than
+   as another section title. */
+.sec-head .statement {
+  font-family: var(--font-display); font-weight: var(--w-label);
+  font-size: var(--fs-body-lg); line-height: var(--lh-h2); letter-spacing: 0;
+  max-width: 46ch;
+}
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(32px, 3.4vw, 48px); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 3vw, 40px); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 2.4vw, 36px); }
+@media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+.row-hairline { border-top: 1px solid var(--hairline); }
+.rule-full { height: 1px; background: var(--hairline); border: 0; }
+
+/* ---------------------------------------------------------------------------
+   5. THE NODE-LINE MOTIF, extended
+   .node-rule already exists in tokens.css. .stack-strip is the new component: the same brass line +
+   dot language replacing tag pills, which are the most generic element in a portfolio card.
+   --------------------------------------------------------------------------- */
+/* tokens.css declares .node-rule's height, width and background but no `display`, so on the <span>
+   this site uses it stays inline and the box is never drawn. One line makes the brand's second
+   signature element actually render. */
+.node-rule { display: block; }
+
+.stack-strip {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 6px 18px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-1);
+  padding-top: 16px; position: relative;
+}
+/* A hairline, not brass. A brass rule spanning the strip would run 280px+; brand-guide.md caps brass
+   rules at 24-80px and says they must always be short. The brass DOTS carry the node motif on their
+   own, which is the point of the component. */
+.stack-strip::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0;
+  height: 1px; background: var(--hairline);
+}
+.stack-strip li { display: flex; align-items: center; gap: 7px; }
+.stack-strip li::before {
+  content: ""; width: 4px; height: 4px; border-radius: 50%;
+  background: var(--accent); flex: none;
+}
+
+/* ---------------------------------------------------------------------------
+   6. MASTHEAD + persistent CTA
+   --------------------------------------------------------------------------- */
+.masthead {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg);
+  height: var(--web-masthead-h);
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease;
+}
+.masthead.is-scrolled { border-bottom-color: var(--masthead); }
+.masthead-inner {
+  height: 100%; display: flex; align-items: center; gap: 24px;
+  padding-inline: var(--web-gutter);
+}
+.masthead .lockup { display: flex; align-items: center; gap: 10px; flex: none; }
+.masthead .lockup svg { color: var(--obsidian-navy); }
+.masthead .lockup:hover svg { color: var(--brass-deep); }
+.nav-links { display: flex; gap: 28px; margin-inline: auto; }
+.nav-links a { font-size: 15px; font-weight: var(--w-medium); }
+.masthead-right { display: flex; align-items: center; gap: 20px; flex: none; }
+.masthead-right .meta { display: none; }
+
+/* Text CTA with a brass underline. Deliberately not a filled pill: brand-guide has no button spec and
+   a filled pill is the most generic element available. */
+.cta-text {
+  font-weight: var(--w-label); font-size: 15px;
+  border-bottom: 1.5px solid var(--accent); padding-bottom: 2px;
+}
+
+@media (min-width: 1080px) { .masthead-right .meta { display: block; } }
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .masthead-right { margin-inline-start: auto; }
+}
+@media (max-width: 700px) {
+  .masthead { height: 56px; }
+  body { padding-bottom: var(--web-mobile-cta-h); }
+}
+
+.mobile-cta-bar { display: none; }
+@media (max-width: 700px) {
+  .mobile-cta-bar {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: auto 0 0 0; z-index: 60;
+    height: var(--web-mobile-cta-h);
+    background: var(--bg); border-top: 1px solid var(--masthead);
+  }
+  .mobile-cta-bar a {
+    font-weight: var(--w-label); font-size: 15px;
+    border-bottom: 1.5px solid var(--accent); padding-bottom: 2px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   7. BUTTONS - exactly one filled element per page, in the hero
+   --------------------------------------------------------------------------- */
+.btn {
+  display: inline-block;
+  font-family: var(--font-body); font-weight: var(--w-label); font-size: var(--fs-body);
+  padding: 14px 26px; border-radius: 6px; border: 1.5px solid var(--obsidian-navy);
+  background: var(--obsidian-navy); color: var(--pearl-ivory);
+  transition: background-color var(--web-t-hover) ease, border-color var(--web-t-hover) ease;
+}
+.btn:hover { background: var(--aged-brass); border-color: var(--aged-brass); color: var(--pearl-ivory); }
+.btn:active { opacity: 0.85; }
+
+.btn--onDark {
+  background: var(--aged-brass); border-color: var(--aged-brass); color: var(--obsidian-navy);
+}
+.btn--onDark:hover {
+  background: var(--pearl-ivory); border-color: var(--pearl-ivory); color: var(--obsidian-navy);
+}
+
+.link-underline { border-bottom: 1.5px solid var(--accent); padding-bottom: 2px; font-weight: var(--w-medium); }
+
+/* ---------------------------------------------------------------------------
+   8. HERO
+   --------------------------------------------------------------------------- */
+.hero { padding: clamp(40px, 4vw, 64px) var(--web-gutter) var(--web-band-y); }
+.hero-grid {
+  display: grid; grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(40px, 4.4vw, 64px); align-items: center;
+}
+@media (max-width: 1080px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-graph { order: 2; max-width: 480px; margin-inline: auto; }
+}
+
+.hero-meta {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  padding-block: 12px;
+  border-top: 1px solid var(--masthead); border-bottom: 1px solid var(--masthead);
+  margin-bottom: 28px;
+}
+.hero-meta .kicker { letter-spacing: 0.18em; }
+.hero h1 { max-width: var(--web-measure-head); margin-block: 22px 0; }
+.hero h1 em { font-style: normal; color: var(--brass-deep); }
+.hero .lead { margin-top: 22px; max-width: 46ch; font-size: var(--fs-body-lg); }
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; margin-top: 32px; }
+.micro-cta { margin-top: 20px; max-width: 52ch; font-size: var(--fs-body-sm); }
+
+/* Hero byline: the face above the fold, in the magazine-author idiom rather than as a hero image.
+   Same file as the large #about portrait, so it costs no extra request. The brass ring is CSS, not
+   baked into the raster, so it stays a true 1.5px at both display sizes. */
+.hero-byline { display: flex; align-items: center; gap: 16px; margin-top: 30px; }
+.hero-byline img {
+  width: 76px; height: 76px; flex: none;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--aged-brass);
+}
+.hero-byline strong {
+  display: block; font-family: var(--font-display); font-weight: var(--w-bold);
+  font-size: var(--fs-body); color: var(--fg-1);
+}
+.hero-byline .meta { display: block; margin-top: 5px; font-size: 11px; line-height: 1.6; }
+
+/* Credential strip - brand signature element: mono label over a display value. */
+.cred-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--hairline);
+}
+.cred-cell { padding-inline: 20px; }
+.cred-cell:first-child { padding-inline-start: 0; }
+.cred-cell + .cred-cell { border-inline-start: 1px solid var(--hairline); }
+.cred-cell .meta { display: block; font-size: 11px; margin-bottom: 7px; }
+.cred-cell strong {
+  font-family: var(--font-display); font-weight: var(--w-bold);
+  font-size: var(--fs-body); color: var(--fg-1); line-height: 1.35;
+}
+@media (max-width: 560px) {
+  .cred-strip { grid-template-columns: 1fr; gap: 18px; }
+  .cred-cell { padding-inline: 0; }
+  .cred-cell + .cred-cell { border-inline-start: 0; border-top: 1px solid var(--hairline); padding-top: 18px; }
+}
+
+/* ---------------------------------------------------------------------------
+   9. THE NODE GRAPH
+   THE ASPECT-RATIO LOCK IS MANDATORY. preserveAspectRatio="xMidYMid meet" letterboxes the SVG
+   whenever the container's ratio differs from the viewBox, which is exactly how label alignment
+   silently detaches at one viewport and never gets noticed. Locking the wrapper to the viewBox ratio
+   removes the whole failure mode.
+   NO <text> IN THE SVG: SVG text scales with the viewBox, so an 11px label lands near 4.5px at mobile
+   width, under the brand's 9px floor. Labels are HTML in grid rows that share the graph's column
+   template - and the template is derived from the real node x-positions, not equal quarters, or the
+   labels sit up to 7px off their nodes.
+   --------------------------------------------------------------------------- */
+.ng-wrap { max-width: 620px; margin-inline: auto; }
+
+/* Node columns sit at x = 80 / 240 / 400 / 560 in a 640-wide viewBox - which is exactly the centre of
+   each quarter (160 wide). That is deliberate: it means four equal 1fr label columns land dead on the
+   nodes with zero positioning maths, at every width. The alternative considered was columns at
+   96/288/480/672 in a 760 viewBox, where equal quarters would have put labels up to 7px off their
+   nodes, drifting proportionally with the viewport.
+   It also improves the logo mapping: x' = 6.667x - 80 and y' = 4.0625y - 1.875, so the mark's own
+   nodes (24,30) and (96,30) land precisely on column 1 and column 4, and the horizontal stretch drops
+   from 2.01:1 to 1.64:1 - enough that the spine still reads as the M-Flow mark, which is what makes
+   the claim in docs/decisions.md true rather than decorative. */
+.ng-labels, .ng-captions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.ng-labels {
+  margin-bottom: 14px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fg-2);                 /* amendment D: Graphite, not Mist - these are the diagram's
+                                         only readable labels, so they cannot be its least legible
+                                         content. */
+}
+.ng-labels span { text-align: center; }
+.ng-svg { width: 100%; height: auto; aspect-ratio: 640 / 480; }
+.ng-captions { margin-top: 12px; align-items: start; }
+.ng-captions .cadence-caps { grid-column: 4; }
+.ng-captions .loop-cap { grid-column: 1; grid-row: 1; }
+.ng-captions li, .ng-captions p {
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-1);
+  text-align: center; line-height: 1.9;
+}
+.ng-captions .loop-cap { color: var(--fg-2); }
+.ng-captions .loop-cap::before {
+  content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--steel-cyan); margin-inline-end: 7px; vertical-align: 0.15em;
+}
+
+.ng-edge   { fill: none; stroke: var(--hairline); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.ng-cyan   { fill: none; stroke: var(--steel-cyan); stroke-width: 1.5; stroke-dasharray: 4 6; }
+.ng-spine  { fill: none; stroke: var(--aged-brass); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.ng-node   { fill: var(--obsidian-navy); }
+.ng-node--brass { fill: var(--aged-brass); }   /* the three M-Flow nodes; these never animate */
+.static-flow { display: none; }                /* reduced-motion substitute for the packet */
+
+/* The 2x2 fallback that replaces the whole SVG under 700px. */
+.ng-fallback { display: none; }
+@media (max-width: 700px) {
+  .ng-wrap { display: none; }
+  .ng-fallback {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--hairline); border-inline-start: 1px solid var(--hairline);
+  }
+  .ng-fallback li {
+    display: flex; align-items: center; gap: 10px; padding: 18px 16px;
+    border-bottom: 1px solid var(--hairline); border-inline-end: 1px solid var(--hairline);
+    font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-2);
+  }
+  .ng-fallback li::before {
+    content: ""; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent); flex: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   10. FIGURES (the proof ledger, work rows, case pages)
+   --------------------------------------------------------------------------- */
+.fig-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.fig-grid .fig-num { font-size: clamp(40px, 5vw, 76px); }
+.fig { padding-inline: clamp(16px, 1.8vw, 28px); }
+.fig:first-child { padding-inline-start: 0; }
+.fig + .fig { border-inline-start: 1px solid var(--hairline); }
+.fig-num {
+  font-family: var(--font-display); font-weight: var(--w-display);
+  font-size: var(--fs-hero-num); line-height: var(--lh-tight); letter-spacing: -0.04em;
+  color: var(--brass-deep);
+  font-variant-numeric: tabular-nums;
+  display: block;
+}
+.fig-num a { color: inherit; }
+.fig-num a:hover { color: var(--obsidian-navy); }
+.fig .node-rule { margin: 18px 0 16px; width: 48px; }
+.fig-cap { font-size: var(--fs-body); font-weight: var(--w-medium); color: var(--fg-1); max-width: 19ch; }
+.fig-src {
+  display: block; margin-top: 12px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--fg-2);            /* amendment D */
+  max-width: 26ch; line-height: 1.7;
+}
+@media (max-width: 900px) {
+  .fig-grid { grid-template-columns: 1fr 1fr; gap: 36px 0; }
+  .fig:nth-child(3) { border-inline-start: 0; padding-inline-start: 0; }
+  .fig:nth-child(-n+2) { padding-bottom: 36px; border-bottom: 1px solid var(--hairline); }
+}
+@media (max-width: 560px) {
+  .fig-grid { grid-template-columns: 1fr; }
+  .fig, .fig:first-child { padding-inline: 0; }
+  .fig + .fig { border-inline-start: 0; border-top: 1px solid var(--hairline); padding-top: 32px; }
+  .fig:nth-child(-n+2) { padding-bottom: 0; border-bottom: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   11. SIMPLE EDITORIAL ITEMS (problem, method, guardrails, risk)
+   Whitespace-separated, never bordered tiles: brand-guide says cards rely on whitespace, not borders.
+   --------------------------------------------------------------------------- */
+/* The reusable chain diagram: ONE brass rail, parameterised, shared by #method and every case page.
+   Deliberately not six bespoke hand-tuned architecture SVGs - those are ~600 lines of coordinates that
+   nothing generates from the real workflows, so they become a lie the day a build changes. */
+.chain-wrap { margin-bottom: clamp(36px, 3.4vw, 52px); }
+.chain { width: 100%; height: 40px; }
+
+.method-grid { align-items: start; }
+@media (max-width: 1200px) and (min-width: 901px) {
+  .method-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.item .node-rule { margin-bottom: 18px; }
+.item .rule-brass { margin-bottom: 18px; }
+.item h3 { margin-bottom: 12px; }
+.item p { max-width: 40ch; }
+.item-ord {
+  display: block;
+  font-family: var(--font-display); font-weight: var(--w-display); font-size: 32px;
+  color: var(--brass-deep); line-height: 1; margin-bottom: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.turn-line {
+  font-family: var(--font-display); font-weight: var(--w-bold); font-size: var(--fs-body-lg);
+  color: var(--fg-1); max-width: 46ch; margin-top: clamp(36px, 3.4vw, 52px);
+}
+
+.evidence { margin-top: 20px; }
+.evidence .meta { display: block; font-size: 11px; margin-bottom: 6px; }
+.evidence p { font-size: var(--fs-body-sm); font-weight: var(--w-medium); color: var(--fg-1); max-width: 44ch; }
+
+/* Brass-left-border callout. No fill, no shadow. */
+.callout {
+  border-inline-start: 1.5px solid var(--accent);
+  padding: 4px 0 4px 28px;
+}
+
+/* Pull-quote: the ONLY serif moment in the brand, and it appears exactly ONCE on this whole site. */
+.pullquote { margin-top: clamp(44px, 4vw, 64px); padding-top: 36px; border-top: 1px solid var(--hairline); }
+.pullquote .quote-mark { display: block; height: 0.52em; overflow: hidden; color: var(--aged-brass); }
+.pullquote blockquote {
+  font-family: var(--font-display); font-weight: var(--w-label); font-size: var(--fs-h3);
+  line-height: var(--lh-h2); color: var(--fg-1); max-width: 40ch; margin-top: 18px;
+}
+.pullquote figcaption { margin-top: 16px; }
+
+/* ---------------------------------------------------------------------------
+   12. THE CADENCE LEDGER (#house, on the dark band)
+   --------------------------------------------------------------------------- */
+.house-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(44px, 5vw, 72px); }
+@media (max-width: 1080px) { .house-grid { grid-template-columns: 1fr; } }
+
+/* The rail and the travelling dot live on a wrapper, not on the <ul>: a <span> as a direct child of
+   <ul> is invalid markup, and only <li> may be a list child. */
+.ledger-wrap { position: relative; padding-inline-start: 26px; }
+.ledger-wrap::before {
+  content: ""; position: absolute; inset-block: 4px; inset-inline-start: 0;
+  width: 1.5px; background: var(--aged-brass); opacity: 0.55;
+}
+.ledger-dot {
+  position: absolute; inset-inline-start: -2px; top: 0;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--aged-brass);
+}
+.ledger li {
+  display: grid; grid-template-columns: 104px 1fr auto; gap: 8px 18px; align-items: baseline;
+  padding-block: 16px;
+  border-top: 1px solid rgba(244, 239, 230, 0.14);
+}
+.ledger li:first-child { border-top: 0; padding-top: 0; }
+.ledger .when, .ledger .where {
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-3);
+}
+.ledger .what { color: #CFCABF; font-size: var(--fs-body-sm); }
+.ledger .what strong { color: var(--pearl-ivory); font-weight: var(--w-label); display: block; margin-bottom: 3px; }
+@media (max-width: 700px) {
+  .ledger li { grid-template-columns: 1fr; }
+  .ledger .where { order: 3; }
+}
+.stamp {
+  display: block; margin-top: 26px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3);
+  line-height: 1.8; max-width: 62ch;
+}
+
+/* ---------------------------------------------------------------------------
+   13. SELECTED WORK
+   --------------------------------------------------------------------------- */
+.case-row {
+  display: grid; grid-template-columns: 1fr auto; gap: clamp(28px, 3.4vw, 56px);
+  padding-block: clamp(32px, 3.2vw, 44px);
+  border-top: 1px solid var(--hairline);
+}
+.case-row:last-of-type { border-bottom: 1px solid var(--hairline); }
+.case-row .kicker { display: block; margin-bottom: 14px; }
+.case-title {
+  font-family: var(--font-display); font-weight: var(--w-bold);
+  font-size: clamp(22px, 1.5vw + 16px, 33px); line-height: var(--lh-h2); letter-spacing: var(--ls-h2);
+  max-width: 26ch; color: var(--fg-1);
+  transition: color var(--web-t-hover) ease;
+}
+.case-title em { font-style: normal; color: var(--brass-deep); }
+.case-row:hover .case-title { color: var(--brass-deep); }   /* colour only; nothing moves */
+.case-row .lead { margin-top: 14px; max-width: 52ch; }
+.case-row .stack-strip { margin-top: 22px; max-width: 46ch; }
+.case-figure { text-align: end; min-width: 150px; }
+.case-figure .fig-num { font-size: clamp(30px, 1.6vw + 22px, 42px); }
+.case-figure .fig-src { margin-top: 10px; max-width: 22ch; margin-inline-start: auto; text-align: end; }
+.case-figure .read { display: inline-block; margin-top: 18px; font-size: var(--fs-body-sm); font-weight: var(--w-label); border-bottom: 1.5px solid var(--accent); padding-bottom: 2px; }
+@media (max-width: 900px) {
+  .case-row { grid-template-columns: 1fr; }
+  .case-figure { text-align: start; }
+  .case-figure .fig-src { margin-inline-start: 0; text-align: start; }
+}
+
+.tier2 { margin-top: clamp(48px, 4.4vw, 72px); }
+.tier2-list { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--hairline); }
+.tier2-list li {
+  padding: 18px 22px 18px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.tier2-list strong { display: block; font-weight: var(--w-label); font-size: 15px; color: var(--fg-1); }
+.tier2-list span { display: block; margin-top: 5px; font-size: 13px; color: var(--fg-2); }
+@media (max-width: 900px) { .tier2-list { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .tier2-list { grid-template-columns: 1fr; } }
+
+/* ---------------------------------------------------------------------------
+   14. THE PATH (rungs)
+   --------------------------------------------------------------------------- */
+.rung {
+  display: grid; grid-template-columns: 76px 1fr auto; gap: 12px 28px;
+  padding-block: clamp(26px, 2.6vw, 36px);
+  border-top: 1px solid var(--hairline);
+}
+.rung:last-of-type { border-bottom: 1px solid var(--hairline); }
+.rung--rec { border-inline-start: 1.5px solid var(--accent); padding-inline-start: 24px; }
+.rung .item-ord { margin-bottom: 0; }
+.rung h3 { margin-bottom: 10px; transition: color var(--web-t-hover) ease; }
+.rung:hover h3 { color: var(--brass-deep); }
+.rung p { max-width: 52ch; }
+.rung-price { text-align: end; min-width: 160px; }
+.rung-price .node-rule { width: 32px; margin: 0 0 12px auto; }
+.rung-price strong {
+  display: block; font-family: var(--font-display); font-weight: var(--w-bold);
+  font-size: var(--fs-h3); color: var(--fg-1);
+}
+.rung-price .meta { display: block; margin-top: 7px; font-size: 11px; }
+@media (max-width: 900px) {
+  .rung { grid-template-columns: 56px 1fr; }
+  .rung-price { grid-column: 2; text-align: start; margin-top: 14px; }
+  .rung-price .node-rule { margin-inline: 0 auto; }
+}
+
+/* ---------------------------------------------------------------------------
+   15. STRAIGHT ANSWERS (native details, node dot as the disclosure indicator)
+   The 10px node dot does the job a chevron would - using brand signature element #2 means no Lucide
+   glyph and no unicode pseudo-icon is ever needed.
+   --------------------------------------------------------------------------- */
+.q { border-top: 1px solid var(--hairline); }
+.q:last-of-type { border-bottom: 1px solid var(--hairline); }
+.q-sum {
+  display: flex; align-items: baseline; gap: 16px;
+  padding-block: 22px; cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display); font-weight: var(--w-label); font-size: var(--fs-h3);
+  color: var(--fg-1);
+  transition: color var(--web-t-hover) ease;
+}
+.q-sum::-webkit-details-marker { display: none; }
+.q-sum:hover { color: var(--brass-deep); }
+.q-dot {
+  flex: none; width: 10px; height: 10px; border-radius: 50%;
+  border: 1.5px solid var(--accent); background: transparent;
+  transform: translateY(0.5em);
+}
+.q[open] .q-dot { background: var(--accent); }
+.q-body { padding: 0 0 26px 26px; }
+.q-body .node-rule { width: 32px; margin-bottom: 16px; }
+.q-body p { max-width: 62ch; }
+
+/* ---------------------------------------------------------------------------
+   16. ABOUT
+   --------------------------------------------------------------------------- */
+.about-grid { display: grid; grid-template-columns: 300px 1fr; gap: clamp(40px, 4.4vw, 64px); }
+@media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } }
+
+.portrait {
+  width: clamp(180px, 22vw, 288px); height: auto; aspect-ratio: 1;
+  border-radius: 50%;
+  /* If the raster fails, the brass mark shows through instead of a hole. */
+  background: var(--obsidian-navy) url("./mark.svg") center / 42% no-repeat;
+}
+.portrait-col .signature { margin-top: 26px; }
+.portrait-col > .meta { display: block; margin-top: 14px; font-size: 11px; line-height: 1.8; }
+
+.about-sub { display: block; margin-bottom: 22px; }
+.about-grid p + p { margin-top: 16px; }
+.about-grid p { max-width: 58ch; }
+
+.cred-strip--about { grid-template-columns: 1fr 1fr; gap: 22px 0; margin-top: 34px; }
+.cred-strip--about .cred-cell:nth-child(3) { border-inline-start: 0; padding-inline-start: 0; }
+@media (max-width: 560px) { .cred-strip--about { grid-template-columns: 1fr; } }
+
+.exp { margin-top: clamp(36px, 3.4vw, 52px); }
+.exp li {
+  display: grid; grid-template-columns: 168px 1fr; gap: 8px 28px;
+  padding-block: 22px; border-top: 1px solid var(--hairline);
+}
+.exp li:last-child { border-bottom: 1px solid var(--hairline); }
+.exp .when { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-2); line-height: 1.9; }
+.exp h3 { margin-bottom: 4px; }
+.exp .org { display: block; font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brass-deep); margin-bottom: 10px; }
+.exp p { font-size: var(--fs-body-sm); max-width: 60ch; }
+@media (max-width: 900px) { .exp li { grid-template-columns: 1fr; } }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+.chip {
+  border: 1px solid var(--hairline); border-radius: 4px; padding: 6px 11px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2);
+}
+
+/* ---------------------------------------------------------------------------
+   17. PROVENANCE - deliberately the only section with no motion at all.
+   It has to look like a record.
+   --------------------------------------------------------------------------- */
+.prov { max-width: 900px; }
+.prov-list { margin-top: 8px; }
+.prov-list li {
+  display: grid; grid-template-columns: 34px 1fr; gap: 6px 8px;
+  padding-block: 18px; border-top: 1px solid var(--hairline);
+}
+.prov-list li:last-child { border-bottom: 1px solid var(--hairline); }
+.prov-i { font-family: var(--font-mono); font-weight: 500; font-size: 12px; color: var(--brass-deep); line-height: 1.7; }
+.prov-claim { font-size: var(--fs-body-sm); color: var(--fg-1); }
+.prov-src {
+  display: block; margin-top: 7px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); line-height: 1.7;
+}
+.prov-back { color: var(--brass-deep); font-family: var(--font-mono); }
+.prov-notes { margin-top: 36px; padding-top: 30px; border-top: 1px solid var(--hairline); }
+.prov-notes > div + div { margin-top: 22px; }
+.prov-notes .meta { display: block; margin-bottom: 8px; font-size: 11px; }
+.prov-notes p { font-size: var(--fs-body-sm); max-width: 68ch; }
+
+/* ---------------------------------------------------------------------------
+   18. CLOSE + COLOPHON
+   --------------------------------------------------------------------------- */
+.close-inner { max-width: 760px; }   /* left-aligned: brand bans centred blocks over two lines */
+.close-inner h2 { margin-block: 22px 0; max-width: 30ch; }
+.close-inner .lead { margin-top: 20px; max-width: 46ch; font-size: var(--fs-body-lg); }
+.close-mail {
+  display: block; margin-top: 28px;
+  font-family: var(--font-mono); font-weight: 500; font-size: 13px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-3);
+}
+.channels { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 26px; }
+.channels li { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-3); }
+.channels li + li::before { content: "\00B7"; color: var(--aged-brass); margin-inline-end: 16px; }
+.channels a:hover { color: var(--aged-brass); }
+.close-inner .signature { margin-top: 44px; }
+
+.colophon { border-top: 1px solid var(--masthead); padding: calc(var(--web-band-y) * 0.5) var(--web-gutter); }
+.colophon-grid { display: grid; grid-template-columns: 5fr 3fr 4fr; gap: 40px; }
+@media (max-width: 900px) { .colophon-grid { grid-template-columns: 1fr; gap: 32px; } }
+.colophon .rule-brass-bold { margin: 18px 0 14px; }
+.colophon h4 { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-2); margin-bottom: 14px; }
+.colophon-links li { padding-block: 5px; font-size: 15px; }
+.colophon-bottom {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px;
+  margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--hairline);
+}
+.colophon-bottom p { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+.colophon-bottom p:last-child { max-width: 58ch; text-transform: none; letter-spacing: 0.02em; }
+
+/* ---------------------------------------------------------------------------
+   19. MOTION - reveal + draw states.
+   Reveals begin BELOW the fold only. The hero H1, lead, CTA and credential strip are at full opacity
+   on first paint, so the most important headline on the site has zero perceived latency.
+   --------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity var(--web-t-reveal) var(--web-ease), transform var(--web-t-reveal) var(--web-ease);
+}
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* Line-draw. pathLength="1" removes any need to measure the real path length by hand. */
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.draw.is-drawn { stroke-dashoffset: 0; transition: stroke-dashoffset 620ms ease-out; }
+
+/* The hero spine draws once on load - pure CSS, no JS, cannot fail. */
+.ng-spine { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ng-draw 1400ms var(--web-ease-draw) forwards; }
+@keyframes ng-draw { to { stroke-dashoffset: 0; } }
+
+.chain-node { opacity: 0; transition: opacity 300ms ease-out; }
+.is-drawn ~ .chain-node, .chain.is-drawn .chain-node { opacity: 1; }
+
+/* ONE moving element, forever, with a silent gap. The packet's path is the continuous M-route only,
+   NOT the full spine string: offset-path traverses sub-paths in sequence, so a multi-subpath value
+   would make the dot teleport at each break. The circle is at 0,0 and offset-path does all the
+   positioning - a non-zero cx/cy composes with the offset transform and renders it off the rail. */
+@supports (offset-path: path("M0 0")) {
+  .ng-packet {
+    /* Exactly the .ng-spine geometry, so the packet rides the highlighted execution path. It is a
+       single continuous sub-path: offset-path traverses sub-paths in sequence, so any discontinuity
+       would make the dot teleport at the break. */
+    offset-path: path("M80 210 H310 A10 10 0 0 1 320 220 V260 A10 10 0 0 0 330 270 H470 A10 10 0 0 0 480 260 V220 A10 10 0 0 1 490 210 H560");
+    offset-rotate: 0deg;
+    fill: var(--aged-brass);
+    animation: ng-packet 9.2s linear infinite;
+  }
+  @keyframes ng-packet {
+    0%      { offset-distance: 0%;   opacity: 0; }
+    2%      { opacity: 0; }
+    4%      { opacity: 0.9; }
+    28%     { opacity: 0.9; }
+    56.5%   { offset-distance: 100%; opacity: 0; }
+    100%    { offset-distance: 100%; opacity: 0; }
+  }
+  /* Paused by site.js whenever the hero is off-screen: offset-distance is not a compositor-thread
+     property in Chromium, so an unpaused infinite loop keeps main-thread work scheduled forever and
+     drains battery on a phone long after the hero has scrolled away. */
+  .ng-packet.is-paused { animation-play-state: paused; }
+}
+@supports not (offset-path: path("M0 0")) {
+  .ng-packet { display: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   20. PRINT
+   --------------------------------------------------------------------------- */
+@media print {
+  .masthead, .mobile-cta-bar, .skip, .ng-packet { display: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .band--dark { background: var(--bg) !important; color: var(--fg-1) !important; }
+  .band--dark h2, .band--dark p { color: var(--fg-1) !important; }
+  body { padding-bottom: 0; }
+}
+
+/* ==========================================================================================
+   21. REDUCED MOTION - MUST BE THE LAST BLOCK IN THIS FILE.
+   If this sat before the component rules, `.reveal { opacity: 1 }` would lose the cascade to the
+   earlier-but-later-declared `.reveal { opacity: 0 }` at equal specificity, and any element the JS
+   guard missed would stay permanently invisible. That is the highest-consequence ordering mistake
+   available in this file. Verified by loading with OS reduce-motion ON and JS blocked TOGETHER.
+   ========================================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    /* transition-delay MUST be zeroed too. site.js writes a per-element stagger delay of up to 400ms,
+       and duration alone does not cancel it - so without this, a reduced-motion visitor watches
+       content pop in one item at a time, which is precisely the effect the setting asks us to remove.
+       It also made the last rows of the cadence ledger absent from every QA screenshot. */
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .draw, .ng-spine { stroke-dashoffset: 0 !important; animation: none !important; }
+  .chain-node { opacity: 1 !important; }
+  .ng-packet { display: none !important; }
+  .static-flow { display: block; }   /* three static brass dots keep the sense of flow */
+}

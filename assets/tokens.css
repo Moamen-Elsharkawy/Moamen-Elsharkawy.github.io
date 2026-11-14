@@ -1,0 +1,330 @@
+/* GENERATED from brand-assets/tokens.css by projects/internal/personal-site/tools/sync-brand.mjs.
+   DO NOT EDIT - edit nothing here. brand-assets/ is frozen; the web layer is site.css, which loads
+   after this file and reassigns the --fs-* tokens to fluid clamp() values. */
+/* ============================================================
+   MOAMEN ELSHARKAWY — PREMIUM LIGHT
+   Colors + Type tokens
+   ============================================================ */
+
+/* ---------- Webfonts (Google Fonts; substitute for shipped TTFs) ---------- */
+/* @import of Google Fonts removed at sync time. The faces are self-hosted and declared in
+   ./fonts.css, which every page links BEFORE this file. See tools/sync-brand.mjs. */
+
+:root {
+  /* ---------- COLOR TOKENS ---------- */
+  /* Brand palette — these six colors are the entire system. */
+  --pearl-ivory:   #F4EFE6;   /* Primary canvas. Replaces white. */
+  --obsidian-navy: #0B1B2C;   /* Type, mark, masthead. Replaces black. */
+  --aged-brass:    #B8924C;   /* Hero accent — kicker, rules, big numbers, quote marks. */
+  --steel-cyan:    #4FB3C7;   /* Secondary accent — keyword highlights, fine details. */
+  --graphite:      #2C3440;   /* Secondary body. */
+  --mist:          #9AA5B1;   /* Tertiary — captions, metadata, dividers. */
+
+  /* Banned-by-system fallbacks (kept here for clarity, not for use) */
+  /* --black: NEVER — use --obsidian-navy */
+  /* --white: NEVER — use --pearl-ivory */
+
+  /* ---------- SEMANTIC COLOR ---------- */
+  --bg:           var(--pearl-ivory);
+  --bg-inverted:  var(--obsidian-navy);
+  --fg-1:         var(--obsidian-navy);   /* Primary type */
+  --fg-2:         var(--graphite);        /* Body, secondary */
+  --fg-3:         var(--mist);            /* Captions, metadata, divider */
+  --accent:       var(--aged-brass);      /* Hero accent */
+  --accent-2:     var(--steel-cyan);      /* Secondary accent */
+  --rule:         var(--aged-brass);      /* Brass thin rule */
+  --hairline:     rgba(154, 165, 177, 0.5); /* Mist 50% — soft divider */
+  --masthead:     var(--obsidian-navy);   /* Magazine top/bottom rules */
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --font-display: "Inter Tight", "Inter", system-ui, -apple-system, sans-serif;
+  --font-body:    "Inter", system-ui, -apple-system, sans-serif;
+  --font-arabic:  "IBM Plex Sans Arabic", "Cairo", "Noto Naskh Arabic", system-ui, sans-serif;
+  --font-quote:   Georgia, "Times New Roman", serif; /* ONLY for oversized decorative quote mark */
+  --font-mono:    "IBM Plex Mono", ui-monospace, "Consolas", monospace; /* tech micro-labels: kickers, metadata, captions */
+
+  /* ---------- TYPE WEIGHTS ---------- */
+  --w-body:    400;
+  --w-medium:  500;
+  --w-label:   600;   /* kicker, button label, tag */
+  --w-bold:    700;   /* H2/H3, wordmark */
+  --w-display: 800;   /* H1, hero numbers */
+
+  /* ---------- TYPE SCALE ---------- */
+  --fs-kicker:    10px;   /* 9–11 acceptable */
+  --fs-caption:   12px;
+  --fs-body-sm:   13px;
+  --fs-body:      15px;
+  --fs-body-lg:   16px;
+  --fs-h3:        18px;
+  --fs-h2:        26px;
+  --fs-h1:        40px;   /* 32–48 */
+  --fs-hero-num:  104px;  /* 80–120 */
+  --fs-quote:     120px;  /* Decorative Georgia quote mark */
+
+  /* ---------- TRACKING ---------- */
+  --ls-display: -0.03em;   /* -1 to -1.5 on large sizes */
+  --ls-h2:      -0.012em;
+  --ls-body:     0;
+  --ls-kicker:   0.22em;   /* 2–3px */
+  --ls-byline:   0.18em;
+
+  /* ---------- LINE HEIGHT ---------- */
+  --lh-tight:   1.05;   /* hero numbers, big display */
+  --lh-display: 1.12;   /* H1 */
+  --lh-h2:      1.18;
+  --lh-body:    1.6;
+  --lh-quote:   1.18;
+
+  /* ---------- LAYOUT TOKENS ---------- */
+  --pad-card:        32px;   /* preferred — never below 24 */
+  --pad-card-min:    24px;
+  --radius-card:      6px;   /* corner radius on post layouts */
+  --radius-tile:      8px;
+  --rule-thin:        1px;   /* masthead, hairline */
+  --rule-mid:       1.5px;   /* brass below kicker */
+  --rule-bold:        4px;   /* brass underline at hero scale */
+  --rule-w-short:    32px;   /* 24–48 brass rule below kicker */
+  --rule-w-stat:     80px;   /* short brass rule below stat context */
+  --rule-w-sig:      40px;   /* under wordmark */
+
+  /* ---------- ASPECT RATIOS ---------- */
+  /* For canvas containers — applied via aspect-ratio. */
+  --ar-post:    4 / 5;     /* 1080×1350 */
+  --ar-cover:   4 / 1;     /* 1584×396 */
+  --ar-thumb:   16 / 9;    /* 1280×720 */
+  --ar-square:  1 / 1;     /* 1080×1080 */
+  --ar-story:   9 / 16;    /* 1080×1920 */
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+html, body {
+  background: var(--bg);
+  color: var(--fg-1);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+   SEMANTIC TYPE — apply directly or via class
+   ============================================================ */
+
+.h1, h1 {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.h2, h2 {
+  font-family: var(--font-display);
+  font-weight: var(--w-bold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  color: var(--fg-1);
+  margin: 0;
+}
+
+.h3, h3 {
+  font-family: var(--font-display);
+  font-weight: var(--w-label);
+  font-size: var(--fs-h3);
+  line-height: 1.3;
+  color: var(--fg-1);
+  margin: 0;
+}
+
+.body, p {
+  font-family: var(--font-body);
+  font-weight: var(--w-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.body-sm {
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+}
+
+/* Kicker label — UPPERCASE, brass, wide-tracked, MONOSPACE (the tech-layer cue). The brand's signature. */
+.kicker {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--fs-kicker);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-block;
+}
+
+/* Caption / metadata in mist — monospace, "reads as code" */
+.caption,
+.meta {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--fs-kicker);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+/* Wordmark — UPPERCASE in footer / signature placement */
+.wordmark {
+  font-family: var(--font-body);
+  font-weight: var(--w-bold);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-byline);
+  text-transform: uppercase;
+  color: var(--fg-1);
+}
+
+/* Hero number — Inter Tight 800 in brass */
+.hero-num {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-hero-num);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+
+/* Pull-quote mark — the only serif moment in the brand */
+.quote-mark {
+  font-family: var(--font-quote);
+  font-weight: 700;
+  font-size: var(--fs-quote);
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.6;
+}
+
+/* Quote body */
+.quote-body {
+  font-family: var(--font-display);
+  font-weight: var(--w-label);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-quote);
+  color: var(--fg-1);
+}
+
+/* Brass rules ------------------------------------------------ */
+.rule-brass {
+  display: block;
+  height: var(--rule-mid);
+  background: var(--accent);
+  border: 0;
+  width: var(--rule-w-short);
+  margin: 0;
+}
+.rule-brass-bold {
+  display: block;
+  height: var(--rule-bold);
+  background: var(--accent);
+  border: 0;
+  width: var(--rule-w-sig);
+  margin: 0;
+}
+.rule-hairline {
+  display: block;
+  height: 1px;
+  background: var(--hairline);
+  border: 0;
+  width: 100%;
+  margin: 0;
+}
+.rule-masthead {
+  display: block;
+  height: 1px;
+  background: var(--masthead);
+  border: 0;
+  width: 100%;
+  margin: 0;
+}
+
+/* Highlights inside headlines */
+.hl-brass { color: var(--accent); }
+.hl-cyan  { color: var(--accent-2); }
+
+/* Arabic block — RTL with the IBM Plex Arabic stack */
+.arabic,
+[dir="rtl"] {
+  font-family: var(--font-arabic);
+}
+
+/* ============================================================
+   CANVAS — fixed-size post / cover / thumb scaffolds
+   ============================================================ */
+
+.canvas {
+  background: var(--bg);
+  color: var(--fg-1);
+  font-family: var(--font-body);
+  position: relative;
+  overflow: hidden;
+}
+.canvas--post   { width: 1080px; height: 1350px; }
+.canvas--square { width: 1080px; height: 1080px; }
+.canvas--thumb  { width: 1280px; height:  720px; }
+.canvas--cover  { width: 1584px; height:  396px; }
+.canvas--story  { width: 1080px; height: 1920px; }
+
+/* ============================================================
+   TECH LAYER — node-line motif + signature (the "AI automation" cue)
+   ============================================================ */
+
+/* Node-line motif: a thin brass line punctuated by 3 dots. The evolution of the plain
+   brass rule; reads as a workflow path. CSS-only (line + 3 radial-gradient dots). */
+.node-rule {
+  height: 9px;
+  width: var(--rule-w-stat);   /* default ~80px; override inline as needed */
+  background:
+    linear-gradient(var(--accent), var(--accent)) 0 50% / 100% 1.5px no-repeat,
+    radial-gradient(circle, var(--accent) 4px, transparent 4.5px) 0%   50% / 9px 9px no-repeat,
+    radial-gradient(circle, var(--accent) 4px, transparent 4.5px) 50%  50% / 9px 9px no-repeat,
+    radial-gradient(circle, var(--accent) 4px, transparent 4.5px) 100% 50% / 9px 9px no-repeat;
+}
+
+/* Signature lockup — the M-Flow mark + name, placed quietly in a corner/footer of every piece.
+   Markup:  <div class="signature"><svg class="sig-mark">…M-Flow…</svg>
+              <span class="sig-name">Moamen Elsharkawy</span></div>
+   On tight surfaces (avatars, small thumbs) drop .sig-name and keep the mark only. */
+.signature {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.signature .sig-mark { display: block; flex: none; }
+.signature .sig-name {
+  font-family: var(--font-body);
+  font-weight: var(--w-label);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-1);
+  white-space: nowrap;
+}
+.signature .sig-name.on-dark { color: var(--pearl-ivory); }
+
+/* The M-Flow mark as an inline SVG (paste this where a mark is needed; set color via `color`).
+   <svg class="sig-mark" viewBox="0 0 120 120" width="26" height="26" style="color:var(--accent)">
+     <path d="M24 30 L24 94 M24 30 L60 74 L96 30 M96 30 L96 94" fill="none"
+       stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+     <circle cx="24" cy="30" r="9" fill="currentColor"/><circle cx="96" cy="30" r="9" fill="currentColor"/>
+     <circle cx="60" cy="74" r="9" fill="currentColor"/>
+   </svg> */

@@ -1,0 +1,54 @@
+/* fonts.css - self-hosted replacement for the Google Fonts @import in tokens.css.
+ *
+ * WHY SELF-HOSTED: brand-assets/tokens.css @imports Google Fonts. On a public site that is a
+ * third-party runtime dependency on the brand's typography, and tools/site-qa.mjs cannot fail on an
+ * external request (it reports them but does not assert), so a blocked CDN would be invisible to the
+ * only gate this site has. Vendoring makes the 404 check meaningful. Precedent: the AI Spark School
+ * site vendors SpaceGrotesk-var.woff2 the same way.
+ *
+ * WHY THIS IS A <link>, NOT AN @import: an @import inside an already-linked stylesheet serialises a
+ * second round trip before any font can start downloading. This file is linked in <head> BEFORE
+ * tokens.css so the faces are declared by the time the type classes need them.
+ *
+ * THREE FILES, NOT EIGHT: Inter and Inter Tight are shipped as variable fonts covering the whole
+ * weight range the brand uses, so one file each replaces four and three static weights. IBM Plex Mono
+ * is only ever used at 500, so it stays a single static face. Latin subset only - this site is
+ * English-only, which is also why IBM Plex Sans Arabic (declared in tokens.css --font-arabic) is
+ * deliberately NOT shipped. Total: 108KB.
+ *
+ * The unicode-range is copied verbatim from the Google-served @font-face blocks these replace.
+ * Licences + attribution: ./fonts/OFL.txt (all three are SIL OFL 1.1).
+ */
+
+/* Inter Tight - display face. Brand uses 600 / 700 / 800. */
+@font-face {
+  font-family: "Inter Tight";
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url("./fonts/InterTight-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Inter - body face. Brand uses 400 / 500 / 600 / 700. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./fonts/Inter-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* IBM Plex Mono - the tech micro-label layer (kickers, metadata, source lines). Only ever 500. */
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/IBMPlexMono-500-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

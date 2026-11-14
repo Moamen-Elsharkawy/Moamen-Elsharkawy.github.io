@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Favicon: the M-Flow mark in Aged Brass on a Pearl Ivory tile. Hand-authored (see mark.svg for
+     why it is not synced). The viewBox is cropped to 14 16 92 92 rather than the canonical
+     0 0 120 120 so the mark fills a 16x16 browser tab instead of floating in whitespace - the mark's
+     drawn bounds with an 11px stroke and r9 nodes are x 18.5-101.5, y 24.5-99.5, so this crop leaves
+     roughly 4px of even padding. Per brand-guide.md, the mark appears alone on tight surfaces; the
+     "Moamen Elsharkawy" half of the signature lockup is dropped at this size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="14 16 92 92" width="92" height="92">
+  <rect x="14" y="16" width="92" height="92" fill="#F4EFE6"/>
+  <path d="M24 30 L24 94 M24 30 L60 74 L96 30 M96 30 L96 94" fill="none" stroke="#B8924C"
+        stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="24" cy="30" r="9" fill="#B8924C"/>
+  <circle cx="96" cy="30" r="9" fill="#B8924C"/>
+  <circle cx="60" cy="74" r="9" fill="#B8924C"/>
+</svg>

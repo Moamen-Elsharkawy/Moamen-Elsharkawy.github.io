@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Absolute URLs. These, robots.txt and the og:/canonical tags in every page are what the
+     moamen-ai.com cutover has to find-and-replace: 11 files, one hostname. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://moamen-elsharkawy.github.io/</loc><priority>1.0</priority></url>
+  <url><loc>https://moamen-elsharkawy.github.io/engineering.html</loc><priority>0.8</priority></url>
+  <url><loc>https://moamen-elsharkawy.github.io/work/aios.html</loc><priority>0.8</priority></url>
+  <url><loc>https://moamen-elsharkawy.github.io/work/instabay-agent.html</loc><priority>0.8</priority></url>
+  <url><loc>https://moamen-elsharkawy.github.io/work/contact-intelligence.html</loc><priority>0.8</priority></url>
+  <url><loc>https://moamen-elsharkawy.github.io/work/video-pipeline.html</loc><priority>0.8</priority></url>
+  <url><loc>https://moamen-elsharkawy.github.io/work/leadsync-ai.html</loc><priority>0.8</priority></url>
+  <url><loc>https://moamen-elsharkawy.github.io/work/meeting-intelligence.html</loc><priority>0.8</priority></url>
+</urlset>

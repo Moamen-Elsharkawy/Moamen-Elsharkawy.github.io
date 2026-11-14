@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The M-Flow mark, Aged Brass on transparent. Hand-authored here, NOT synced: brand-assets/ has no
+     standalone mark file (only the 06-logo-system.svg spec sheet) and brand-assets/ is frozen.
+     Geometry is copied from the canonical snippet in brand-assets/tokens.css lines 320-326: a
+     geometric M routed through three brass nodes, reading input -> step -> output.
+     Used as a file only where currentColor cannot reach (the portrait's CSS background fallback).
+     Everywhere else the mark is inlined in the HTML so it inherits color. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120"
+     role="img" aria-label="Moamen Elsharkawy">
+  <path d="M24 30 L24 94 M24 30 L60 74 L96 30 M96 30 L96 94" fill="none" stroke="#B8924C"
+        stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="24" cy="30" r="9" fill="#B8924C"/>
+  <circle cx="96" cy="30" r="9" fill="#B8924C"/>
+  <circle cx="60" cy="74" r="9" fill="#B8924C"/>
+</svg>
